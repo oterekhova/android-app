@@ -8,16 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.adapter.NewsAdapter
-import com.example.myapplication.data.NewsContent
 import com.example.myapplication.services.RetrofitApiClient
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var newsRecyclerView: RecyclerView
-    private var compositeDisposable: CompositeDisposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,21 +27,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadNewsData() {
-        compositeDisposable?.add(
-            RetrofitApiClient.create().getNews()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { result -> handleResponse(result.payload) },
-                    { error -> error.printStackTrace() })
-        )
-    }
-
-    private fun handleResponse(newsList: List<NewsContent>) {
-        val newsArrayList = ArrayList(newsList)
-        val newsAdapter = NewsAdapter(newsArrayList!!)
+        val newsList = RetrofitApiClient.create().getNews().execute().body()!!.payload
+        val newsAdapter = NewsAdapter(newsList)
         newsRecyclerView.adapter = newsAdapter
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
