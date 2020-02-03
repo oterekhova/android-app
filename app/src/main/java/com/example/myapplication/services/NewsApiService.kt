@@ -7,7 +7,7 @@ import retrofit2.http.GET
 
 interface NewsApiService {
 
-    @GET("/news")
+    @GET("news")
     fun getNews(): Call<News>
 
 }

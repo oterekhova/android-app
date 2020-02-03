@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.adapter.NewsAdapter
 import com.example.myapplication.services.RetrofitApiClient
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,9 +28,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadNewsData() {
-        val newsList = RetrofitApiClient.create().getNews().execute().body()!!.payload
-        val newsAdapter = NewsAdapter(newsList)
-        newsRecyclerView.adapter = newsAdapter
+        thread {
+            val newsList = RetrofitApiClient.create().getNews().execute().body()!!.payload
+            newsRecyclerView.post {
+                val newsAdapter = NewsAdapter(newsList)
+                newsRecyclerView.adapter = newsAdapter
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

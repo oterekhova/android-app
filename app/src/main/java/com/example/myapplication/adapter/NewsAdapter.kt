@@ -8,11 +8,12 @@ import com.example.myapplication.R
 import com.example.myapplication.data.NewsContent
 import kotlinx.android.synthetic.main.news_item.view.*
 
-class NewsAdapter(private val newsList: ArrayList<NewsContent>) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(private val newsList: ArrayList<NewsContent>) :
+    RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
-    class NewsViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView) {
+    class NewsViewHolder(private val textView: TextView) : RecyclerView.ViewHolder(textView) {
         fun bind(name: String) {
-            textView.news_name.text = name
+            textView.text = name
         }
     }
 

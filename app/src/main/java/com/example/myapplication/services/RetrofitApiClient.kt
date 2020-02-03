@@ -8,7 +8,7 @@ class RetrofitApiClient {
     companion object Factory {
         fun create(): NewsApiService {
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.tinkoff.ru/v1")
+                .baseUrl("https://api.tinkoff.ru/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
