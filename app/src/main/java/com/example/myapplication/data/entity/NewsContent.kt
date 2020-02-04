@@ -1,4 +1,4 @@
-package com.example.myapplication.data
+package com.example.myapplication.data.entity
 
 data class NewsContent(
     val id: String,
