@@ -2,18 +2,16 @@ package com.example.myapplication.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.adapter.NewsAdapter
 import com.example.myapplication.services.RetrofitApiClient
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var newsRecyclerView: RecyclerView
+    private val adapter: NewsAdapter by lazy { NewsAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,29 +21,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNewsRecyclerView() {
-        newsRecyclerView = findViewById(R.id.news_list)
-        newsRecyclerView.layoutManager = LinearLayoutManager(this)
+        news_list.layoutManager = LinearLayoutManager(this)
+        news_list.adapter = adapter
     }
 
     private fun loadNewsData() {
         thread {
             val newsList = RetrofitApiClient.create().getNews().execute().body()!!.payload
-            newsRecyclerView.post {
-                val newsAdapter = NewsAdapter(newsList)
-                newsRecyclerView.adapter = newsAdapter
+            news_list.post {
+                adapter.setItems(newsList)
+                adapter.notifyDataSetChanged()
             }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
