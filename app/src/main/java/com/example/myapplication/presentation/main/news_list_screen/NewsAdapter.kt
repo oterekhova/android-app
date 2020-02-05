@@ -19,6 +19,10 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun getItems(): ArrayList<NewsContent> {
+        return ArrayList(newsList)
+    }
+
     fun setOnClickListener(l: View.OnClickListener) {
         onClickListener = l
     }
