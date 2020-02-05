@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private fun initNewsRecyclerView() {
         news_list.layoutManager = LinearLayoutManager(this)
         news_list.adapter = adapter
-        //setOnClickListener()
+        setOnClickListener()
     }
 
     private fun loadNewsData() {
@@ -44,9 +45,12 @@ class MainActivity : AppCompatActivity() {
             )
     }
 
-//    private fun setOnClickListener() {
-//        adapter.setOnClickListener(View.OnClickListener { print("message") })
-//    }
+    private fun setOnClickListener() {
+        adapter.setOnClickListener(View.OnClickListener {
+            // TODO добавить реализацию
+        })
+        adapter.notifyDataSetChanged()
+    }
 
     override fun onDestroy() {
         super.onDestroy()

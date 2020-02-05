@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.news_item.view.*
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
-    //private var onClickListener: View.OnClickListener? = null
+    private var onClickListener: View.OnClickListener? = null
     private val newsList: MutableList<NewsContent> = ArrayList()
 
     fun setItems(newItems: List<NewsContent>) {
@@ -19,13 +19,13 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         notifyDataSetChanged()
     }
 
-//    fun setOnClickListener(l: View.OnClickListener) {
-//        onClickListener = l
-//    }
+    fun setOnClickListener(l: View.OnClickListener) {
+        onClickListener = l
+    }
 
-    class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(name: String) {
-            //itemView.setOnClickListener(onClickListener)
+            itemView.setOnClickListener(onClickListener)
             itemView.news_name.text = name
         }
     }
