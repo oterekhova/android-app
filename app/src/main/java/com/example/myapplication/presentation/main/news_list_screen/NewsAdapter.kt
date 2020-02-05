@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.adapter
+package com.example.myapplication.presentation.main.news_list_screen
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.news_item.view.*
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
+    //private var onClickListener: View.OnClickListener? = null
     private val newsList: MutableList<NewsContent> = ArrayList()
 
     fun setItems(newItems: List<NewsContent>) {
@@ -18,8 +19,13 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         notifyDataSetChanged()
     }
 
+//    fun setOnClickListener(l: View.OnClickListener) {
+//        onClickListener = l
+//    }
+
     class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(name: String) {
+            //itemView.setOnClickListener(onClickListener)
             itemView.news_name.text = name
         }
     }
@@ -28,7 +34,9 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.news_item, parent, false) as View
 
-        return NewsViewHolder(view)
+        return NewsViewHolder(
+            view
+        )
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {

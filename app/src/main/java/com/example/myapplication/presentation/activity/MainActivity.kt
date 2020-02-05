@@ -2,26 +2,24 @@ package com.example.myapplication.presentation.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.data.api.RetrofitApiClient
-import com.example.myapplication.presentation.adapter.NewsAdapter
+import com.example.myapplication.presentation.main.news_list_screen.NewsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.news_list.*
+
 
 class MainActivity : AppCompatActivity() {
 
     private val adapter: NewsAdapter by lazy { NewsAdapter() }
-    private var compositeDisposable: CompositeDisposable? = null
+    private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        compositeDisposable = CompositeDisposable()
+        setContentView(R.layout.news_list)
         initNewsRecyclerView()
         loadNewsData()
     }
@@ -29,35 +27,31 @@ class MainActivity : AppCompatActivity() {
     private fun initNewsRecyclerView() {
         news_list.layoutManager = LinearLayoutManager(this)
         news_list.adapter = adapter
+        //setOnClickListener()
     }
 
     private fun loadNewsData() {
-        compositeDisposable?.add(
-            RetrofitApiClient.create().getNews()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { result ->
-                        val sortedNews =
-                            result.payload.sortedByDescending { it.publicationDate.milliseconds }
-                        adapter.setItems(sortedNews)
-                        adapter.notifyDataSetChanged()
-                    },
-                    { error -> error.printStackTrace() }
-                )
-        )
+        disposable = RetrofitApiClient.create().getNews()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                { result ->
+                    val sortedNews =
+                        result.payload.sortedByDescending { it.publicationDate.milliseconds }
+                    adapter.setItems(sortedNews)
+                    adapter.notifyDataSetChanged()
+                },
+                { error -> error.printStackTrace() }
+            )
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+//    private fun setOnClickListener() {
+//        adapter.setOnClickListener(View.OnClickListener { print("message") })
+//    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
     }
 
 }
