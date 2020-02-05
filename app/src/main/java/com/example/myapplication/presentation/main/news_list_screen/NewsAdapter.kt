@@ -34,9 +34,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.news_item, parent, false) as View
 
-        return NewsViewHolder(
-            view
-        )
+        return NewsViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {

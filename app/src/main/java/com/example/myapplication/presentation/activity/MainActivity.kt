@@ -9,7 +9,7 @@ import com.example.myapplication.presentation.main.news_list_screen.NewsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.news_list.*
+import kotlinx.android.synthetic.main.news_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.news_list)
+        setContentView(R.layout.news_main)
         initNewsRecyclerView()
         loadNewsData()
     }
@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
                     val sortedNews =
                         result.payload.sortedByDescending { it.publicationDate.milliseconds }
                     adapter.setItems(sortedNews)
-                    adapter.notifyDataSetChanged()
                 },
                 { error -> error.printStackTrace() }
             )
