@@ -5,32 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.data.entity.NewsContent
+import com.example.myapplication.data.entity.NewsDetails
 import kotlinx.android.synthetic.main.news_item.view.*
 
-class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(private val listener: (String) -> Unit) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
-    private var onClickListener: View.OnClickListener? = null
-    private val newsList: MutableList<NewsContent> = ArrayList()
+    private val newsList: MutableList<NewsDetails> = ArrayList()
 
-    fun setItems(newItems: List<NewsContent>) {
+    fun setItems(newItems: List<NewsDetails>) {
         newsList.clear()
         newsList.addAll(newItems)
         notifyDataSetChanged()
     }
 
-    fun getItems(): ArrayList<NewsContent> {
+    fun getItems(): ArrayList<NewsDetails> {
         return ArrayList(newsList)
     }
 
-    fun setOnClickListener(l: View.OnClickListener) {
-        onClickListener = l
-    }
-
     inner class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(name: String) {
-            itemView.setOnClickListener(onClickListener)
-            itemView.news_name.text = name
+        fun bind(newsDetails: NewsDetails) {
+            itemView.setOnClickListener { listener.invoke(newsDetails.id) }
+            itemView.news_name.text = newsDetails.text
         }
     }
 
@@ -42,7 +37,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(newsList[position].text)
+        holder.bind(newsList[position])
     }
 
     override fun getItemCount() = newsList.size
