@@ -8,7 +8,8 @@ import com.example.myapplication.R
 import com.example.myapplication.data.entity.NewsDetails
 import kotlinx.android.synthetic.main.news_item.view.*
 
-class NewsAdapter(private val listener: (String) -> Unit) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(private val listener: (String) -> Unit) :
+    RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     private val newsList: MutableList<NewsDetails> = ArrayList()
 
@@ -29,14 +30,20 @@ class NewsAdapter(private val listener: (String) -> Unit) : RecyclerView.Adapter
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): NewsViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.news_item, parent, false) as View
 
         return NewsViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: NewsViewHolder,
+        position: Int
+    ) {
         holder.bind(newsList[position])
     }
 

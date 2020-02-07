@@ -12,14 +12,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        displayNewsList()
+        if (savedInstanceState == null) {
+            displayNewsList()
+        }
     }
 
     private fun displayNewsList() {
         val newsMainFragment = NewsMainFragment.newInstance()
         val fragmentTransition = supportFragmentManager.beginTransaction()
         fragmentTransition.replace(R.id.news_frame, newsMainFragment)
-        fragmentTransition.addToBackStack(null)
         fragmentTransition.commit()
     }
 

@@ -1,13 +1,16 @@
 package com.example.myapplication.presentation.main.news_content_screen
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.myapplication.R
-import com.example.myapplication.data.api.RetrofitApiClient
+import com.example.myapplication.data.Dependencies
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -17,12 +20,12 @@ import kotlinx.android.synthetic.main.news_content.view.*
 
 class NewsContentFragment : Fragment() {
 
-    private val CONTENT_KEY = "serializable_content_key"
     private var disposable: CompositeDisposable? = null
 
     companion object {
 
-        private val NEWS_ID = "news_id"
+        const val CONTENT_KEY = "serializable_content_key"
+        const val NEWS_ID = "news_id"
 
         fun newInstance(content: String): NewsContentFragment {
             val newsContentFragment = NewsContentFragment()
@@ -33,42 +36,62 @@ class NewsContentFragment : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        disposable = CompositeDisposable()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.news_content, container, false)
-        disposable = CompositeDisposable()
+        return if (view != null) {
+            view
+        } else {
+            inflater.inflate(R.layout.news_content, container, false)
+        }
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState != null) {
             restore(savedInstanceState)
         } else {
             displayNewsContent(view.content)
         }
-
-        return view
     }
 
     private fun displayNewsContent(textView: TextView) {
-        val newsId = arguments!!.getString(NEWS_ID)
-        setNewsContent(newsId!!, textView)
+        arguments?.getString(NEWS_ID)?.let {
+            setNewsContent(it, textView)
+        }
     }
 
-    private fun setNewsContent(id: String, textView: TextView) {
+    private fun setNewsContent(
+        id: String,
+        textView: TextView
+    ) {
         disposable?.add(
-            RetrofitApiClient.create().getNewsContent(id)
-                .observeOn(AndroidSchedulers.mainThread())
+            Dependencies.newsApi.getNewsContent(id)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { result -> textView.text = result.payload.content },
+                    { result ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            textView.text = Html.fromHtml(
+                                result.payload.content,
+                                Html.FROM_HTML_MODE_COMPACT
+                            )
+                        }
+                    },
                     { error -> error.printStackTrace() }
                 )
         )
     }
 
     private fun restore(savedInstanceState: Bundle) {
-        if (savedInstanceState.getSerializable(CONTENT_KEY) != null) {
-            val savedNews = savedInstanceState.getCharSequence(CONTENT_KEY)
+        val savedNews = savedInstanceState.getCharSequence(CONTENT_KEY)
+        savedNews?.let {
             content.text = savedNews
         }
     }
