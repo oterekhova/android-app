@@ -51,6 +51,7 @@ class NewsMainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initNewsRecyclerView()
+        createSwipeLayout()
         if (savedInstanceState != null) {
             restore(savedInstanceState)
         } else {
@@ -99,5 +100,19 @@ class NewsMainFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         disposable?.dispose()
+    }
+
+    private fun createSwipeLayout() {
+        swipe_container.setOnRefreshListener {
+            swipe_container.isRefreshing = true
+            loadNewsData()
+            swipe_container.isRefreshing = false
+        }
+        swipe_container.setColorSchemeResources(
+            android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light
+        )
     }
 }
