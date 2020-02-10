@@ -9,6 +9,6 @@
             android:id="@+id/news_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/news_item" />
+            tools:listitem="@layout/item_news_list" />
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

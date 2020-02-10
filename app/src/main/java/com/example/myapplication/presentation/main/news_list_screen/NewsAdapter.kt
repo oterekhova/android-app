@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.data.entity.NewsDetails
-import kotlinx.android.synthetic.main.news_item.view.*
+import kotlinx.android.synthetic.main.item_news_list.view.*
 
 class NewsAdapter(private val listener: (String) -> Unit) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
@@ -19,9 +19,7 @@ class NewsAdapter(private val listener: (String) -> Unit) :
         notifyDataSetChanged()
     }
 
-    fun getItems(): ArrayList<NewsDetails> {
-        return ArrayList(newsList)
-    }
+    val items: ArrayList<NewsDetails> get() = ArrayList(newsList)
 
     inner class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(newsDetails: NewsDetails) {
@@ -35,7 +33,7 @@ class NewsAdapter(private val listener: (String) -> Unit) :
         viewType: Int
     ): NewsViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.news_item, parent, false) as View
+            .inflate(R.layout.item_news_list, parent, false) as View
 
         return NewsViewHolder(view)
     }
@@ -47,6 +45,6 @@ class NewsAdapter(private val listener: (String) -> Unit) :
         holder.bind(newsList[position])
     }
 
-    override fun getItemCount() = newsList.size
+    override fun getItemCount(): Int = newsList.size
 
 }

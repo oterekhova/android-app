@@ -7,7 +7,6 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
 import com.example.myapplication.data.Dependencies
@@ -15,8 +14,7 @@ import com.example.myapplication.data.entity.NewsContent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.news_content.*
-import kotlinx.android.synthetic.main.news_content.view.*
+import kotlinx.android.synthetic.main.fragment_news_content.*
 
 
 class NewsContentFragment : Fragment() {
@@ -49,7 +47,7 @@ class NewsContentFragment : Fragment() {
         return if (view != null) {
             view
         } else {
-            inflater.inflate(R.layout.news_content, container, false)
+            inflater.inflate(R.layout.fragment_news_content, container, false)
         }
     }
 
@@ -58,11 +56,11 @@ class NewsContentFragment : Fragment() {
         if (savedInstanceState != null) {
             restore(savedInstanceState)
         } else {
-            displayNewsContent(view.content)
+            displayNewsContent()
         }
     }
 
-    private fun displayNewsContent(textView: TextView) {
+    private fun displayNewsContent() {
         arguments?.getString(NEWS_ID)?.let {
             loadNewsContent(it)
         }

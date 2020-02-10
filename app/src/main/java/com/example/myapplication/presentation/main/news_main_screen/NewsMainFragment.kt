@@ -16,7 +16,7 @@ import com.example.myapplication.presentation.main.news_list_screen.NewsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.news_main.*
+import kotlinx.android.synthetic.main.fragment_news_list.*
 
 
 class NewsMainFragment : Fragment() {
@@ -44,7 +44,7 @@ class NewsMainFragment : Fragment() {
         return if (view != null) {
             view
         } else {
-            inflater.inflate(R.layout.news_main, container, false)
+            inflater.inflate(R.layout.fragment_news_list, container, false)
         }
     }
 
@@ -101,7 +101,7 @@ class NewsMainFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(ARRAY_KEY, adapter.getItems())
+        outState.putSerializable(ARRAY_KEY, adapter.items)
     }
 
     override fun onDestroy() {
