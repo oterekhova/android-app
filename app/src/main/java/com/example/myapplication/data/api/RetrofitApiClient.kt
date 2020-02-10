@@ -7,9 +7,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitApiClient {
 
     companion object Factory {
+
+        private const val BASE_URL = "https://api.tinkoff.ru/v1/"
+
         fun create(): NewsApi {
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.tinkoff.ru/v1/")
+                .baseUrl(BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

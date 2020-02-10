@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
 import com.example.myapplication.data.Dependencies
+import com.example.myapplication.data.entity.NewsContent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -63,30 +64,31 @@ class NewsContentFragment : Fragment() {
 
     private fun displayNewsContent(textView: TextView) {
         arguments?.getString(NEWS_ID)?.let {
-            setNewsContent(it, textView)
+            loadNewsContent(it)
         }
     }
 
-    private fun setNewsContent(
-        id: String,
-        textView: TextView
-    ) {
+    private fun loadNewsContent(id: String) {
         disposable?.add(
             Dependencies.newsApi.getNewsContent(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { result ->
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            textView.text = Html.fromHtml(
-                                result.payload.content,
-                                Html.FROM_HTML_MODE_COMPACT
-                            )
-                        }
-                    },
+                    { result -> setContentText(result) },
                     { error -> error.printStackTrace() }
                 )
         )
+    }
+
+    private fun setContentText(newsContent: NewsContent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            content.text = Html.fromHtml(
+                newsContent.payload.content,
+                Html.FROM_HTML_MODE_COMPACT
+            )
+        } else {
+            content.text = Html.fromHtml(newsContent.payload.content)
+        }
     }
 
     private fun restore(savedInstanceState: Bundle) {

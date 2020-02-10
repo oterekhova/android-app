@@ -73,9 +73,16 @@ class NewsMainFragment : Fragment() {
             Dependencies.newsApi.getNews()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { swipe_container.isRefreshing = true }
                 .subscribe(
-                    { result -> sortAndSet(result) },
-                    { error -> error.printStackTrace() }
+                    { result ->
+                        sortAndSet(result)
+                        swipe_container.isRefreshing = false
+                    },
+                    { error ->
+                        error.printStackTrace()
+                        swipe_container.isRefreshing = false
+                    }
                 )
         )
     }
@@ -104,9 +111,7 @@ class NewsMainFragment : Fragment() {
 
     private fun createSwipeLayout() {
         swipe_container.setOnRefreshListener {
-            swipe_container.isRefreshing = true
             loadNewsData()
-            swipe_container.isRefreshing = false
         }
         swipe_container.setColorSchemeResources(
             android.R.color.holo_blue_bright,
